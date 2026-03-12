@@ -1,0 +1,1 @@
+"C:/Unreal Engine/Installs/UE_5.5/Engine/Build/BatchFiles/Build.bat" NightmareEditor Win64 Development "C:/UEProjects/Nightmare/Nightmare.uproject" -waitmutex -NoHotReload
