@@ -1,0 +1,27 @@
+#pragma once
+
+#include "CoreMinimal.h"
+#include "Engine/DataAsset.h"
+
+#include "ItemData.generated.h"
+
+UCLASS()
+class UItemData : public UPrimaryDataAsset
+{
+	GENERATED_BODY()
+
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
+	FText ItemName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
+	FText ItemDescription;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
+	TObjectPtr<UTexture2D> Icon;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
+	FIntPoint ItemSize;
+	
+};
