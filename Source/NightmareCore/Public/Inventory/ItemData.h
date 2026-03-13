@@ -22,6 +22,15 @@ public:
 	TObjectPtr<UTexture2D> Icon;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
-	FIntPoint ItemSize;
+	TObjectPtr<UStaticMesh> WorldModel;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
+	bool CanStack;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item", meta=(EditCondition = "CanStack", ClampMin = "1", UIMin = "1"))
+	int32 MaxStackSize = 1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
+	FIntPoint ItemSize = FIntPoint(1,1);
 	
 };

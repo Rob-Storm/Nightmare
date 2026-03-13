@@ -5,6 +5,7 @@
 
 #include "Components/StaticMeshComponent.h"
 #include "Components/TextRenderComponent.h"
+#include "Components/AudioComponent.h"
 
 #include "Interactable.h"
 
@@ -21,6 +22,8 @@ public:
 
 	AScrapCompactor();
 
+	virtual void BeginPlay() override;
+
 	UPROPERTY(BlueprintAssignable, BlueprintCallable, BlueprintReadWrite, Category="Compactor")
 	FOnProductionTickedSignature OnProductionTicked;
 
@@ -29,11 +32,14 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components")
 	TObjectPtr<UStaticMeshComponent> Model;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components")
+	TObjectPtr<UAudioComponent> AudioComponent;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Compactor")
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category="Compactor")
 	int32 CurrentScrap = 0;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Compactor")
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category="Compactor")
 	int32 MaxScrap = 1000;
 
 	/** How many seconds between each production tick */
@@ -44,16 +50,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Compactor")
 	int32 ProduceAmount = 50;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="NightmareCore")
-	TObjectPtr<USoundBase> EngineLoop;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Compactor")
+	TObjectPtr<USoundBase> ProduceSound;
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Compactor")
-	void ProductionTick();
-	void ProductionTick_Implementation();
-
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="NightmareCore")
-	void SetScrapAmount(int32 Amount);
-	void SetScrapAmount_Implementation(int32 Amount);
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category="Compactor")
+	void ScrapProductionTick();
+	void ScrapProductionTick_Implementation();
 
 	UFUNCTION(BlueprintCallable, Category="Compactor")
 	void UpdateText();
@@ -63,5 +65,13 @@ public:
 	{
 		return FString::FromInt(CurrentScrap) + TEXT(" / ") + FString::FromInt(MaxScrap);
 	};
+
+private:
+
+	UPROPERTY()
+	FTimerHandle ProductionTimerHandle;
+
+	UFUNCTION() void OnRep_CurrentScrap();
+	UFUNCTION() void OnRep_MaxScrap();
 
 };

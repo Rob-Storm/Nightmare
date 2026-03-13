@@ -11,5 +11,8 @@ class ANightmareGameState : public AGameState
 	GENERATED_BODY()
 
 public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Game State")
+	int32 CurrentHour = 0;
 	
 };
