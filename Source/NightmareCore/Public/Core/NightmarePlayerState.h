@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Net/UnrealNetwork.h"
 #include "GameFramework/PlayerState.h"
 
 #include "NightmarePlayerState.generated.h"
@@ -17,7 +18,7 @@ public:
 	UPROPERTY(BlueprintAssignable, BlueprintCallable, BlueprintReadWrite, Category="Player State")
 	FOnScrapChangedSignature OnScrapChanged;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Player State")
+	UPROPERTY(ReplicatedUsing = OnRep_CurrentScrap, EditAnywhere, BlueprintReadWrite, Category="Player State")
 	int32 CurrentScrap;
 
 	UFUNCTION(BlueprintCallable, Category="Player State")
@@ -25,7 +26,15 @@ public:
 	{
 		CurrentScrap += Amount;
 
-		OnScrapChanged.Broadcast(CurrentScrap);
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, FString::FromInt(CurrentScrap));
+
+		OnRep_CurrentScrap();
+		ForceNetUpdate();
 	}
+
+private:
+
+	UFUNCTION()
+	void OnRep_CurrentScrap();
 
 };

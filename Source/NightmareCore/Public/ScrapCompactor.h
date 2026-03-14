@@ -36,10 +36,10 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components")
 	TObjectPtr<UAudioComponent> AudioComponent;
 	
-	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category="Compactor")
+	UPROPERTY(ReplicatedUsing = OnRep_CurrentScrap, EditAnywhere, BlueprintReadWrite, Category="Compactor")
 	int32 CurrentScrap = 0;
 
-	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category="Compactor")
+	UPROPERTY(ReplicatedUsing = OnRep_MaxScrap, EditAnywhere, BlueprintReadWrite, Category="Compactor")
 	int32 MaxScrap = 1000;
 
 	/** How many seconds between each production tick */
@@ -53,9 +53,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Compactor")
 	TObjectPtr<USoundBase> ProduceSound;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Compactor")
+	TObjectPtr<USoundBase> CollectSound;
+
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category="Compactor")
-	void ScrapProductionTick();
-	void ScrapProductionTick_Implementation();
+	void Server_ScrapProductionTick();
+	void Server_ScrapProductionTick_Implementation();
 
 	UFUNCTION(BlueprintCallable, Category="Compactor")
 	void UpdateText();
@@ -65,6 +68,9 @@ public:
 	{
 		return FString::FromInt(CurrentScrap) + TEXT(" / ") + FString::FromInt(MaxScrap);
 	};
+
+	virtual void Interact_Implementation(class ACharacter* CallingCharacter) override;
+
 
 private:
 

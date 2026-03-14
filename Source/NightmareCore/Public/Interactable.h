@@ -19,6 +19,6 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Interactable")
 	void Interact(class ACharacter* CallingCharacter);
-	void Interact_Implementation(class ACharacter* CallingCharacter);
+	virtual void Interact_Implementation(class ACharacter* CallingCharacter);
 	
 };

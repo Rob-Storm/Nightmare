@@ -5,8 +5,14 @@
 #include "TimerManager.h"
 #include "Kismet/GameplayStatics.h"
 
+#include "NightmarePlayer.h"
+#include "Core/NightmarePlayerState.h"
+
 AScrapCompactor::AScrapCompactor()
 {
+
+	bReplicates = true;
+
 	Model = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Model"));
 	ScrapText = CreateDefaultSubobject<UTextRenderComponent>(TEXT("ScrapText"));
 	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("EngineLoopAudio"));
@@ -22,13 +28,17 @@ void AScrapCompactor::BeginPlay()
 
 	UpdateText();
 
+	GetWorldTimerManager().SetTimer(ProductionTimerHandle, this, &AScrapCompactor::Server_ScrapProductionTick, ProduceTickRate, true, ProduceTickRate);
+
+	/*
 	if(HasAuthority())
 	{
-		GetWorldTimerManager().SetTimer(ProductionTimerHandle, this, &AScrapCompactor::ScrapProductionTick, ProduceTickRate, true, 0.f);
-	}	
+		GetWorldTimerManager().SetTimer(ProductionTimerHandle, this, &AScrapCompactor::Server_ScrapProductionTick, ProduceTickRate, true, ProduceTickRate);
+	}
+	*/	
 }
 
-void AScrapCompactor::ScrapProductionTick_Implementation()
+void AScrapCompactor::Server_ScrapProductionTick_Implementation()
 {
 	CurrentScrap += ProduceAmount;
 	CurrentScrap = FMath::Clamp(CurrentScrap, 0, MaxScrap);
@@ -54,6 +64,38 @@ void AScrapCompactor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 
 	DOREPLIFETIME(AScrapCompactor, CurrentScrap);
 	DOREPLIFETIME(AScrapCompactor, MaxScrap);
+}
+
+void AScrapCompactor::Interact_Implementation(class ACharacter* CallingCharacter)
+{
+	if(CurrentScrap <= 0)
+	{
+		return;
+	}
+
+	ANightmarePlayer* Player = Cast<ANightmarePlayer>(CallingCharacter);
+
+	if(!Player)
+	{
+		return;
+	}
+
+	ANightmarePlayerState* PlayerState = Cast<ANightmarePlayerState>(Player->GetPlayerState());
+
+	if(!PlayerState)
+	{
+		return;
+	}
+
+	PlayerState->AddScrap(CurrentScrap);
+
+	CurrentScrap = 0;
+	OnRep_CurrentScrap();
+
+	if(!IsRunningDedicatedServer())
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, CollectSound, GetActorLocation(), GetActorRotation(), 1.f, 1.f, 0.f);
+	}
 }
 
 void AScrapCompactor::OnRep_CurrentScrap()
