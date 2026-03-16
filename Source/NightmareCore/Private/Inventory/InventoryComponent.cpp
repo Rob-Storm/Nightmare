@@ -1,4 +1,22 @@
 #include "Inventory/InventoryComponent.h"
+#include "UObject/Object.h"
+
+void UInventoryComponent::BeginPlay()
+{
+	ItemSlotRows.Empty();
+	ItemSlotRows.SetNum(InventorySize.Y);
+
+	for(int rowIndex = 0; rowIndex < InventorySize.Y; rowIndex++)
+	{
+		FItemSlotArray& Row = ItemSlotRows[rowIndex];
+		Row.SlotsRow.SetNum(InventorySize.X);
+
+		for(int slotIndex = 0; slotIndex < InventorySize.X; slotIndex++)
+		{
+			Row.SlotsRow[slotIndex] = NewObject<UItemSlot>(this);
+		}
+	}
+}
 
 void UInventoryComponent::AddItem(UItem* Item)
 {
@@ -15,9 +33,9 @@ bool UInventoryComponent::CanItemFit(UItem* Item, FIntPoint& OutFirstValidLocati
 	UItemData* ItemData = Item->ItemData;
 
 	// upper left position of item in slots
-	for(int x = 0; x > InventorySize.X; x++)
+	for(int x = 0; x < InventorySize.X; x++)
 	{
-		for(int y = 0; y > InventorySize.Y; y++)
+		for(int y = 0; y < InventorySize.Y; y++)
 		{
 			if(CanItemFitAtLocation(ItemData->ItemSize, FIntPoint(x, y)))
 			{
@@ -37,9 +55,9 @@ bool UInventoryComponent::CanItemFit(UItem* Item, FIntPoint& OutFirstValidLocati
 bool UInventoryComponent::CanItemFitAtLocation(FIntPoint ItemSize, FIntPoint Location)
 {
 	// item width and height
-	for(int w = 0; w > ItemSize.X - 1; w++)
+	for(int w = 0; w < ItemSize.X - 1; w++)
 	{
-		for(int h = 0; h > ItemSize.Y - 1; h++)
+		for(int h = 0; h < ItemSize.Y - 1; h++)
 		{
 			// Item is probably at the edge and the size is greater than 1 on either axis
 			if(!IsValidSlot(FIntPoint(Location.Y + h, Location.X + w)))
@@ -65,10 +83,10 @@ UItem* UInventoryComponent::GetItemFromSlot(FIntPoint Location)
 		return nullptr;
 	}
 
-	return ItemSlotRows[Location.Y].ItemSlots[Location.X]->SlotItem;
+	return ItemSlotRows[Location.Y].SlotsRow[Location.X]->SlotItem;
 }
 
 bool UInventoryComponent::IsValidSlot(FIntPoint Location)
 {
-	return ItemSlotRows.IsValidIndex(Location.Y) && ItemSlotRows[Location.Y].ItemSlots.IsValidIndex(Location.X);
+	return ItemSlotRows.IsValidIndex(Location.Y) && ItemSlotRows[Location.Y].SlotsRow.IsValidIndex(Location.X);
 }

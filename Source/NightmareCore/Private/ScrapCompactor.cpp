@@ -94,6 +94,7 @@ void AScrapCompactor::Interact_Implementation(class ACharacter* CallingCharacter
 
 	if(!IsRunningDedicatedServer())
 	{
+		// netmulticast this!
 		UGameplayStatics::PlaySoundAtLocation(this, CollectSound, GetActorLocation(), GetActorRotation(), 1.f, 1.f, 0.f);
 	}
 }

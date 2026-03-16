@@ -9,7 +9,7 @@
 
 /** Item representation in inventory */
 
-UCLASS()
+UCLASS(Blueprintable, BlueprintType)
 class UItem : public UObject
 {
 	GENERATED_BODY()
@@ -22,5 +22,4 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
 	TObjectPtr<UItemData> ItemData;
 
-	
 };

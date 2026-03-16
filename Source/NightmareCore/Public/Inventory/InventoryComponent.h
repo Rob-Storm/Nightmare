@@ -18,6 +18,8 @@ class UInventoryComponent : public UActorComponent
 
 public:
 
+	virtual void BeginPlay() override;
+
 	UPROPERTY(BlueprintAssignable, BlueprintCallable, BlueprintReadWrite, Category="Inventory")
 	FOnInventoryContentsChangedSignature OnInventoryContentsChanged;
 
