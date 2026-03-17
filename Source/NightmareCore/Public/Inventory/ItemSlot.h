@@ -33,12 +33,7 @@ public:
 	TObjectPtr<class UItem> SlotItem;
 
 	UFUNCTION(BlueprintCallable, Category="Item Slot")
-	void SetSlotItem(class UItem* Item)
-	{
-		SlotItem = Item;
-
-		OnSlotItemChanged.Broadcast(SlotItem);
-	}
+	void SetSlotItem(class UItem* Item);
 
 	UFUNCTION(BlueprintCallable, Category="Item Slot")
 	bool IsTopLeftSlot(FIntPoint SlotPosition);

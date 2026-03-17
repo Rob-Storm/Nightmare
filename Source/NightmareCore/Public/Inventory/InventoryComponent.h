@@ -36,13 +36,16 @@ public:
 	FIntPoint InventorySize = FIntPoint(4,3);
 
 	UFUNCTION(BlueprintCallable, Category="Inventory")
-	void AddItem(UItem* Item);
+	void AddItem(class UItemData* ItemData, FIntPoint Location);
 
 	UFUNCTION(BlueprintCallable, Category="Inventory")
 	void RemoveItem(UItem* Item);
 
+	UFUNCTION(BlueprintCallable, Category="Inventory")
+	void SpawnItemActor(UItem* Item);
+
 	UFUNCTION(BlueprintPure, BlueprintCallable, Category="Inventory")
-	bool CanItemFit(UItem* Item, FIntPoint& OutFirstValidLocation);
+	bool CanItemFit(class UItemData* ItemData, FIntPoint& OutFirstValidLocation);
 
 	UFUNCTION(BlueprintPure, BlueprintCallable, Category="Inventory")
 	bool CanItemFitAtLocation(FIntPoint ItemSize, FIntPoint Location);
@@ -52,5 +55,11 @@ public:
 
 	UFUNCTION(BlueprintPure, BlueprintCallable, Category="Inventory")
 	bool IsValidSlot(FIntPoint Location);
+
+	UFUNCTION(BlueprintCallable, Category="Inventory")
+	void SetSlotItemLocation(UItem* Item, FIntPoint Location);
+
+	UFUNCTION(BlueprintCallable, Category="Inventory")
+	void SetCellItem(UItem* Item, FIntPoint Location);
 	
 };
