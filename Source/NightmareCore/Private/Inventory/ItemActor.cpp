@@ -11,6 +11,12 @@ AItemActor::AItemActor()
 	RootComponent = Model;
 }
 
+void AItemActor::SetItemData(UItemData* NewItemData)
+{
+	ItemData = NewItemData;
+	Model->SetStaticMesh(ItemData->WorldModel);
+}
+
 void AItemActor::Interact_Implementation(ACharacter* CallingCharacter)
 {
 	ANightmarePlayer* Player = Cast<ANightmarePlayer>(CallingCharacter);

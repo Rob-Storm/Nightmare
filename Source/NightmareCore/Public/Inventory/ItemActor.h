@@ -25,6 +25,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="ItemActor")
 	TObjectPtr<UItemData> ItemData;
 
+	UFUNCTION(BlueprintCallable, Category="ItemActor")
+	void SetItemData(UItemData* NewItemData);
+
 	virtual void Interact_Implementation(class ACharacter* CallingCharacter) override;
 
 	virtual void PostEditChangeProperty(struct FPropertyChangedEvent& PropertyChangedEvent) override;

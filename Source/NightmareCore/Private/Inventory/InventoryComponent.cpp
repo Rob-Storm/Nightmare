@@ -49,14 +49,14 @@ void UInventoryComponent::RemoveItem(UItem* Item)
 
 	int32 RemoveItemIndex = ItemList.Find(Item);
 
-	if(RemoveItemIndex = -1)
+	if(RemoveItemIndex == -1)
 	{
 		return;
 	}
 
-	ItemList.RemoveAt(Item);
+	ItemList.RemoveAt(RemoveItemIndex);
 
-	SetSlotItemLocation(nullptr, Location);
+	// todo: set the slots the item occupied to nullptr
 }
 
 void UInventoryComponent::SpawnItemActor(UItem* Item)
@@ -70,7 +70,7 @@ void UInventoryComponent::SpawnItemActor(UItem* Item)
 	FRotator SpawnRotation = FRotator::ZeroRotator;
 
 	AItemActor* SpawnedItemActor = GetWorld()->SpawnActor<AItemActor>(AItemActor::StaticClass(), SpawnLocation, SpawnRotation);
-	SpawnedItemActor->SetItemData(Item->ItemData); // todo: implement this function in ItemActor
+	SpawnedItemActor->SetItemData(Item->ItemData);
 
 }
 
