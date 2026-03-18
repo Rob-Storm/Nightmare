@@ -9,6 +9,7 @@
 #include "InventoryComponent.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnInventoryContentsChangedSignature, TArray<UItem*>, ItemList, TArray<FItemSlotArray>, ItemSlotList);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnInventoryChangedSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInventorySizeChangedSignature, FIntPoint, NewSize);
 
 UCLASS(Blueprintable, BlueprintType)
@@ -22,6 +23,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable, BlueprintCallable, BlueprintReadWrite, Category="Inventory")
 	FOnInventoryContentsChangedSignature OnInventoryContentsChanged;
+
+	UPROPERTY(BlueprintAssignable, BlueprintCallable, BlueprintReadWrite, Category="Inventory")
+	FOnInventoryChangedSignature OnInventoryChanged;
 
 	UPROPERTY(BlueprintAssignable, BlueprintCallable, BlueprintReadWrite, Category="Inventory")
 	FOnInventorySizeChangedSignature OnInventorySizeChanged;
@@ -61,5 +65,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="Inventory")
 	void SetCellItem(UItem* Item, FIntPoint Location);
+
+	UFUNCTION(BlueprintCallable, Category="NightmareCore")
+	void ClearCells(FIntPoint OldLocation, FIntPoint OldSize);
 	
 };

@@ -38,6 +38,8 @@ void UInventoryComponent::AddItem(UItemData* ItemData, FIntPoint Location)
 	ItemList.Add(NewItem);
 
 	SetSlotItemLocation(NewItem, Location);
+
+	OnInventoryChanged.Broadcast();
 }
 
 void UInventoryComponent::RemoveItem(UItem* Item)
@@ -57,6 +59,10 @@ void UInventoryComponent::RemoveItem(UItem* Item)
 	ItemList.RemoveAt(RemoveItemIndex);
 
 	// todo: set the slots the item occupied to nullptr
+
+	ClearCells(Item->ItemLocation, Item->ItemData->ItemSize);
+
+	OnInventoryChanged.Broadcast();
 }
 
 void UInventoryComponent::SpawnItemActor(UItem* Item)
@@ -163,4 +169,15 @@ void UInventoryComponent::SetCellItem(UItem* Item, FIntPoint Location)
 	}
 
 	ItemSlotRows[Location.Y].SlotsRow[Location.X]->SetSlotItem(Item);
+}
+
+void UInventoryComponent::ClearCells(FIntPoint OldLocation, FIntPoint OldSize)
+{
+	for(int32 x = 0; x < OldSize.X; x++)
+	{
+		for(int32 y = 0; y < OldSize.Y; y++)
+		{
+			SetCellItem(nullptr, FIntPoint(x, y) + OldLocation);
+		}
+	}
 }
