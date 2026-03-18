@@ -12,6 +12,12 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnInventoryContentsChangedSignatur
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnInventoryChangedSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInventorySizeChangedSignature, FIntPoint, NewSize);
 
+/*
+* Todo:
+* Add replication and actually make the damn class work in multiplayer!
+* Not looking forward to this!
+*/
+
 UCLASS(Blueprintable, BlueprintType)
 class UInventoryComponent : public UActorComponent
 {

@@ -58,8 +58,6 @@ void UInventoryComponent::RemoveItem(UItem* Item)
 
 	ItemList.RemoveAt(RemoveItemIndex);
 
-	// todo: set the slots the item occupied to nullptr
-
 	ClearCells(Item->ItemLocation, Item->ItemData->ItemSize);
 
 	OnInventoryChanged.Broadcast();
@@ -173,6 +171,7 @@ void UInventoryComponent::SetCellItem(UItem* Item, FIntPoint Location)
 
 void UInventoryComponent::ClearCells(FIntPoint OldLocation, FIntPoint OldSize)
 {
+	// yoinks scoob! like, you're repeating yourself, man!
 	for(int32 x = 0; x < OldSize.X; x++)
 	{
 		for(int32 y = 0; y < OldSize.Y; y++)
