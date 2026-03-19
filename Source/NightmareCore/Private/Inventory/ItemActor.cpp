@@ -6,6 +6,8 @@
 
 AItemActor::AItemActor()
 {
+	bReplicates = true;
+	
 	Model = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Model"));
 
 	RootComponent = Model;

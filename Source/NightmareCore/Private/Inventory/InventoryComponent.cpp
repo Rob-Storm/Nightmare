@@ -70,12 +70,25 @@ void UInventoryComponent::SpawnItemActor(UItem* Item)
 		return;
 	}
 
-	FVector SpawnLocation = FVector(0.f, 0.f, 100.f);
-	FRotator SpawnRotation = FRotator::ZeroRotator;
+	AActor* Owner = GetOwner();
 
-	AItemActor* SpawnedItemActor = GetWorld()->SpawnActor<AItemActor>(AItemActor::StaticClass(), SpawnLocation, SpawnRotation);
+	FHitResult Hit;
+
+	FVector TraceStart = Owner->GetActorLocation();
+	FVector TraceEnd = Owner->GetActorLocation() + (Owner->GetActorUpVector() * -1) * 1000.f;
+
+	FCollisionQueryParams QueryParams;
+	QueryParams.AddIgnoredActor(Owner);
+	GetWorld()->LineTraceSingleByChannel(Hit, TraceStart, TraceEnd, ECollisionChannel::ECC_Pawn, QueryParams);
+
+	FVector SpawnLocation = Hit.Location;
+	FRotator SpawnRotation = Owner->GetActorRotation();
+
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+
+	AItemActor* SpawnedItemActor = GetWorld()->SpawnActor<AItemActor>(AItemActor::StaticClass(), SpawnLocation, SpawnRotation, SpawnParams);
 	SpawnedItemActor->SetItemData(Item->ItemData);
-
 }
 
 bool UInventoryComponent::CanItemFit(class UItemData* ItemData, FIntPoint& OutFirstValidLocation)
