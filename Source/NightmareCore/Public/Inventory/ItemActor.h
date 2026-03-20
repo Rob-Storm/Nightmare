@@ -22,7 +22,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components")
 	TObjectPtr<UStaticMeshComponent> Model;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="ItemActor")
+	UPROPERTY(ReplicatedUsing = OnRep_ItemData, EditAnywhere, BlueprintReadWrite, Category="ItemActor")
 	TObjectPtr<UItemData> ItemData;
 
 	UFUNCTION(BlueprintCallable, Category="ItemActor")
@@ -31,5 +31,10 @@ public:
 	virtual void Interact_Implementation(class ACharacter* CallingCharacter) override;
 
 	virtual void PostEditChangeProperty(struct FPropertyChangedEvent& PropertyChangedEvent) override;
+
+private:
+
+	UFUNCTION()
+	void OnRep_ItemData();
 	
 };

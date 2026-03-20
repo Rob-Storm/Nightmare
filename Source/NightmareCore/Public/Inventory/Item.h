@@ -16,10 +16,12 @@ class UItem : public UObject
 
 public:
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
-	FIntPoint ItemLocation;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadOnly)
 	TObjectPtr<UItemData> ItemData;
+
+	virtual bool IsSupportedForNetworking() const override
+	{
+		return true;
+	}
 
 };

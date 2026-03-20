@@ -1,5 +1,6 @@
 #include "Inventory/ItemActor.h"
 #include "UObject/Object.h"
+#include "Net/UnrealNetwork.h"
 
 #include "GameFramework/Character.h"
 #include "NightmarePlayer.h"
@@ -17,6 +18,15 @@ void AItemActor::SetItemData(UItemData* NewItemData)
 {
 	ItemData = NewItemData;
 	Model->SetStaticMesh(ItemData->WorldModel);
+
+	OnRep_ItemData();
+}
+
+void AItemActor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AItemActor, ItemData);
 }
 
 void AItemActor::Interact_Implementation(ACharacter* CallingCharacter)
@@ -33,11 +43,9 @@ void AItemActor::Interact_Implementation(ACharacter* CallingCharacter)
 		return;
 	}
 
-	FIntPoint InitialItemLocation;
-
-	if(Player->InventoryComponent->CanItemFit(ItemData, InitialItemLocation))
+	if(Player)
 	{
-		Player->InventoryComponent->AddItem(ItemData, InitialItemLocation);
+		Player->InventoryComponent->Server_AddItem(ItemData);
 		Destroy();
 	}
 
@@ -63,3 +71,8 @@ void AItemActor::PostEditChangeProperty(struct FPropertyChangedEvent& PropertyCh
 }
 
 #endif
+
+void AItemActor::OnRep_ItemData()
+{
+	Model->SetStaticMesh(ItemData->WorldModel);
+}

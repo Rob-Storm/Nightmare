@@ -3,20 +3,12 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 
-#include "Inventory/ItemSlot.h"
 #include "Inventory/Item.h"
 
 #include "InventoryComponent.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnInventoryContentsChangedSignature, TArray<UItem*>, ItemList, TArray<FItemSlotArray>, ItemSlotList);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInventoryContentsChangedSignature, TArray<UItem*>, ItemList);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnInventoryChangedSignature);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInventorySizeChangedSignature, FIntPoint, NewSize);
-
-/*
-* Todo:
-* Add replication and actually make the damn class work in multiplayer!
-* Not looking forward to this!
-*/
 
 UCLASS(Blueprintable, BlueprintType)
 class UInventoryComponent : public UActorComponent
@@ -25,7 +17,7 @@ class UInventoryComponent : public UActorComponent
 
 public:
 
-	virtual void BeginPlay() override;
+	UInventoryComponent();
 
 	UPROPERTY(BlueprintAssignable, BlueprintCallable, BlueprintReadWrite, Category="Inventory")
 	FOnInventoryContentsChangedSignature OnInventoryContentsChanged;
@@ -33,46 +25,21 @@ public:
 	UPROPERTY(BlueprintAssignable, BlueprintCallable, BlueprintReadWrite, Category="Inventory")
 	FOnInventoryChangedSignature OnInventoryChanged;
 
-	UPROPERTY(BlueprintAssignable, BlueprintCallable, BlueprintReadWrite, Category="Inventory")
-	FOnInventorySizeChangedSignature OnInventorySizeChanged;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Inventory")
+	UPROPERTY(ReplicatedUsing = OnRep_ItemList, EditAnywhere, BlueprintReadWrite, Category="Inventory")
 	TArray<UItem*> ItemList;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Inventory")
-	TArray<FItemSlotArray> ItemSlotRows;
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category="Inventory")
+	void Server_AddItem(class UItemData* ItemData);
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Inventory")
-	FIntPoint InventorySize = FIntPoint(4,3);
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category="Inventory")
+	void Server_RemoveItem(UItem* Item);
 
-	UFUNCTION(BlueprintCallable, Category="Inventory")
-	void AddItem(class UItemData* ItemData, FIntPoint Location);
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category="Inventory")
+	void Server_SpawnItemActor(UItem* Item);
 
-	UFUNCTION(BlueprintCallable, Category="Inventory")
-	void RemoveItem(UItem* Item);
+private:
 
-	UFUNCTION(BlueprintCallable, Category="Inventory")
-	void SpawnItemActor(UItem* Item);
-
-	UFUNCTION(BlueprintPure, BlueprintCallable, Category="Inventory")
-	bool CanItemFit(class UItemData* ItemData, FIntPoint& OutFirstValidLocation);
-
-	UFUNCTION(BlueprintPure, BlueprintCallable, Category="Inventory")
-	bool CanItemFitAtLocation(FIntPoint ItemSize, FIntPoint Location);
-
-	UFUNCTION(BlueprintPure, BlueprintCallable, Category="Inventory")
-	UItem* GetItemFromSlot(FIntPoint Location);
-
-	UFUNCTION(BlueprintPure, BlueprintCallable, Category="Inventory")
-	bool IsValidSlot(FIntPoint Location);
-
-	UFUNCTION(BlueprintCallable, Category="Inventory")
-	void SetSlotItemLocation(UItem* Item, FIntPoint Location);
-
-	UFUNCTION(BlueprintCallable, Category="Inventory")
-	void SetCellItem(UItem* Item, FIntPoint Location);
-
-	UFUNCTION(BlueprintCallable, Category="NightmareCore")
-	void ClearCells(FIntPoint OldLocation, FIntPoint OldSize);
+	UFUNCTION()
+	void OnRep_ItemList();
 	
 };
