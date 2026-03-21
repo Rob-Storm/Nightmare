@@ -48,7 +48,6 @@ void UInventoryComponent::Server_RemoveItem_Implementation(UItem* Item)
 	RemoveReplicatedSubObject(Item);
 
 	OnRep_ItemList();
-
 }
 
 void UInventoryComponent::Server_SpawnItemActor_Implementation(UItem* Item)
@@ -77,6 +76,28 @@ void UInventoryComponent::Server_SpawnItemActor_Implementation(UItem* Item)
 
 	AItemActor* SpawnedItemActor = GetWorld()->SpawnActor<AItemActor>(AItemActor::StaticClass(), SpawnLocation, SpawnRotation, SpawnParams);
 	SpawnedItemActor->SetItemData(Item->ItemData);
+	SpawnedItemActor->Model->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
+}
+
+bool UInventoryComponent::HasItem(UItemData* ItemType, UItem* &OutFoundItem)
+{
+	OutFoundItem = nullptr;
+
+	if(!ItemType)
+	{
+		return false;
+	}
+
+	for(UItem* Item : ItemList)
+	{
+		if(Item->ItemData == ItemType)
+		{
+			OutFoundItem = Item;
+			return true;
+		}
+	}
+
+	return false;
 }
 
 void UInventoryComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
