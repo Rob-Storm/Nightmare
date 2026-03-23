@@ -5,6 +5,10 @@
 
 #include "Blueprint/UserWidget.h"
 
+#include "OnlineSubsystem.h"
+#include "VoiceModule.h"
+#include "Interfaces/VoiceInterface.h"
+
 #include "NightmarePlayerController.generated.h"
 
 UCLASS()
@@ -14,7 +18,10 @@ class ANightmarePlayerController : public APlayerController
 
 public:
 
+	virtual void BeginPlay() override;
 	virtual void BeginPlayingState() override;
+
+	IOnlineVoicePtr VoiceInterface;
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category="UserInterface")
 	void CreateScrapUI();
@@ -33,5 +40,11 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category="UserInterface")
 	void FocusWidget(UUserWidget* InWidget, bool ShowCursor = true);
+
+	UFUNCTION(BlueprintCallable, Category="VoiceChat")
+	void BeginVoiceChat();
+
+	UFUNCTION(BlueprintCallable, Category="VoiceChat")
+	void EndVoiceChat();
 	
 };

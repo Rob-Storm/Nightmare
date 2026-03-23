@@ -30,7 +30,9 @@ public:
 
 	virtual void Interact_Implementation(class ANightmarePlayerController* CallingController) override;
 
+#if WITH_EDITOR
 	virtual void PostEditChangeProperty(struct FPropertyChangedEvent& PropertyChangedEvent) override;
+#endif
 
 private:
 
