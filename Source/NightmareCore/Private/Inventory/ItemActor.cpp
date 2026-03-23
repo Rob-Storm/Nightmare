@@ -3,6 +3,7 @@
 #include "Net/UnrealNetwork.h"
 
 #include "GameFramework/Character.h"
+#include "Core/NightmarePlayerController.h"
 #include "NightmarePlayer.h"
 
 AItemActor::AItemActor()
@@ -29,9 +30,9 @@ void AItemActor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
 	DOREPLIFETIME(AItemActor, ItemData);
 }
 
-void AItemActor::Interact_Implementation(ACharacter* CallingCharacter)
+void AItemActor::Interact_Implementation(ANightmarePlayerController* CallingController)
 {
-	ANightmarePlayer* Player = Cast<ANightmarePlayer>(CallingCharacter);
+	ANightmarePlayer* Player = Cast<ANightmarePlayer>(CallingController->GetPawn());
 
 	if(!ItemData)
 	{

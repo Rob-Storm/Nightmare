@@ -18,7 +18,7 @@ class NIGHTMARECORE_API IInteractable
 public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Interactable")
-	void Interact(class ACharacter* CallingCharacter);
-	virtual void Interact_Implementation(class ACharacter* CallingCharacter);
+	void Interact(class ANightmarePlayerController* CallingController);
+	virtual void Interact_Implementation(class ANightmarePlayerController* CallingController);
 	
 };

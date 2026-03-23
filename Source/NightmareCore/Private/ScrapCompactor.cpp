@@ -6,6 +6,7 @@
 #include "Kismet/GameplayStatics.h"
 
 #include "NightmarePlayer.h"
+#include "Core/NightmarePlayerController.h"
 #include "Core/NightmarePlayerState.h"
 
 AScrapCompactor::AScrapCompactor()
@@ -66,14 +67,14 @@ void AScrapCompactor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 	DOREPLIFETIME(AScrapCompactor, MaxScrap);
 }
 
-void AScrapCompactor::Interact_Implementation(class ACharacter* CallingCharacter)
+void AScrapCompactor::Interact_Implementation(ANightmarePlayerController* CallingController)
 {
 	if(CurrentScrap <= 0)
 	{
 		return;
 	}
 
-	ANightmarePlayer* Player = Cast<ANightmarePlayer>(CallingCharacter);
+	ANightmarePlayer* Player = Cast<ANightmarePlayer>(CallingController->GetPawn());
 
 	if(!Player)
 	{

@@ -28,7 +28,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category="ItemActor")
 	void SetItemData(UItemData* NewItemData);
 
-	virtual void Interact_Implementation(class ACharacter* CallingCharacter) override;
+	virtual void Interact_Implementation(class ANightmarePlayerController* CallingController) override;
 
 	virtual void PostEditChangeProperty(struct FPropertyChangedEvent& PropertyChangedEvent) override;
 

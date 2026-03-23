@@ -3,7 +3,12 @@
 
 AWorkbench::AWorkbench()
 {
+	bReplicates = true;
 	Model = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Model"));
+	RootComponent = Model;	
+}
 
-	RootComponent = Model;
+void AWorkbench::Interact_Implementation(class ANightmarePlayerController* CallingController)
+{
+
 }

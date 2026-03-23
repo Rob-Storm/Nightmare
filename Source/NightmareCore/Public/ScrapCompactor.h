@@ -69,7 +69,7 @@ public:
 		return FString::FromInt(CurrentScrap) + TEXT(" / ") + FString::FromInt(MaxScrap);
 	};
 
-	virtual void Interact_Implementation(class ACharacter* CallingCharacter) override;
+	virtual void Interact_Implementation(class ANightmarePlayerController* CallingController) override;
 
 
 private:

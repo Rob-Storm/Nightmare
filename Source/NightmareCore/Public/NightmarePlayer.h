@@ -5,9 +5,11 @@
 
 #include "Inventory/InventoryComponent.h"
 
+#include "WorkbenchRecipes.h"
+
 #include "NightmarePlayer.generated.h"
 
-UCLASS()
+UCLASS(Blueprintable, BlueprintType)
 class ANightmarePlayer : public ACharacter
 {
 	GENERATED_BODY()
@@ -18,5 +20,8 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components")
 	TObjectPtr<UInventoryComponent> InventoryComponent;
+
+	UFUNCTION(BlueprintCallable, Category="Recipe")
+	bool CanBuyRecipe(const FWorkbenchRecipe& Recipe) const;
 	
 };
