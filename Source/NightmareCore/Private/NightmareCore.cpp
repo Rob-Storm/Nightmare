@@ -16,4 +16,5 @@ void FNightmareCore::ShutdownModule()
 	UE_LOG(LogNightmareCore, Log, TEXT("NightmareCore module shutting down"));
 }
 
-IMPLEMENT_GAME_MODULE(FNightmareCore, NightmareCore);
+//IMPLEMENT_GAME_MODULE(FNightmareCore, NightmareCore);
+IMPLEMENT_PRIMARY_GAME_MODULE(FDefaultGameModuleImpl, NightmareCore, "NightmareCore");

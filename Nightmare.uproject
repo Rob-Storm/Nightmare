@@ -19,6 +19,6 @@
 		{
 			"Name": "OnlineSubsystemSteam",
 			"Enabled": true
-		}
+		},
 	]
 }

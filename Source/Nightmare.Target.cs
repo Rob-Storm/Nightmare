@@ -1,11 +1,13 @@
 using UnrealBuildTool;
+using System.Collections.Generic;
 
 public class NightmareTarget : TargetRules
 {
 	public NightmareTarget(TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Game;
-		DefaultBuildSettings = BuildSettingsVersion.V4;
-		ExtraModuleNames.AddRange( new string[] { "NightmareCore" } );
+		DefaultBuildSettings = BuildSettingsVersion.V5;
+		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_5;
+		ExtraModuleNames.Add("NightmareCore");
 	}
 }
