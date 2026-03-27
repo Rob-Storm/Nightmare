@@ -1,4 +1,7 @@
 #include "Core/NightmarePlayerController.h"
+#include "Core/NightmareGameState.h"
+
+#include "Kismet/GameplayStatics.h"
 
 #include "Widgets/WorkbenchWidget.h"
 
@@ -63,4 +66,16 @@ void ANightmarePlayerController::EndVoiceChat()
 	*/
 
 	ToggleSpeaking(false);
+}
+
+void ANightmarePlayerController::Server_SendChatMessage_Implementation(const FChatMessage& Message)
+{
+	TObjectPtr<ANightmareGameState> GS = Cast<ANightmareGameState>(UGameplayStatics::GetGameState(this));
+
+	if(!GS)
+	{
+		return;
+	}
+
+	GS->Server_SendChatMessage(Message);
 }

@@ -6,7 +6,7 @@
 #include "NightmareGameMode.generated.h"
 
 UCLASS()
-class ANightmareGameMode : public AGameModeBase
+class ANightmareGameMode : public AGameMode
 {
 	GENERATED_BODY()
 

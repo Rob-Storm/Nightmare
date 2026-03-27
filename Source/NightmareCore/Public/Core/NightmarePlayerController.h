@@ -9,6 +9,8 @@
 #include "VoiceModule.h"
 #include "Interfaces/VoiceInterface.h"
 
+#include "ChatMessage.h"
+
 #include "NightmarePlayerController.generated.h"
 
 UCLASS()
@@ -41,10 +43,16 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category="UserInterface")
 	void FocusWidget(UUserWidget* InWidget, bool ShowCursor = true);
 
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category="UserInterface")
+	void FocusGame();
+
 	UFUNCTION(BlueprintCallable, Category="VoiceChat")
 	void BeginVoiceChat();
 
 	UFUNCTION(BlueprintCallable, Category="VoiceChat")
 	void EndVoiceChat();
+
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category="Text Chat")
+	void Server_SendChatMessage(const FChatMessage& Message);
 	
 };
